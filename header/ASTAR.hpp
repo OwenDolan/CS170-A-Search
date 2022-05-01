@@ -10,22 +10,10 @@
 
 using namespace std;
 
-struct HeuristicComparator
-{
-    bool operator()(const Node* lhs, const Node* rhs) const {
-        if (lhs->heuristicVal < rhs->heuristicVal) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-};
-
 class ASTAR {
 public:
 
-Node* solve(Problem* p, int choice);
+const Node& solve(Problem* p, int choice);
 
 private:
 

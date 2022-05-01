@@ -6,10 +6,10 @@ using namespace std;
 void initialize(Problem* p, int choice) {
 
     vector<vector<int> > init {
-        {1, 0, 3}, {4, 2, 6}, {7,5,8}
+        {1, 4, 7}, {0, 2, 5}, {3,6,8}
     };
     vector<vector<int> > goal {
-        {1, 2, 3}, {4,5,6}, {7,8,0} 
+        {1, 4, 7}, {2,5,8}, {3,6,0} 
     };
 
 /*
@@ -60,15 +60,15 @@ void initialize(Problem* p, int choice) {
     }
 }
 
-void printSol(Node* sol) {
-    if (sol->parent_ptr == nullptr) {
+void printSol(const Node &sol) {
+    if (sol.parent_ptr == nullptr) {
         return;
     }
-    printSol(sol->parent_ptr);
+    printSol(sol.parent_ptr);
     
-    for (unsigned j = 0; j < sol->current_state.size(); j++) {
-        for (unsigned i = 0; i < sol->current_state[i].size(); i++) {
-            cout << sol->current_state[i][j] << " ";
+    for (unsigned i = 0; i < sol.current_state.size(); i++) {
+        for (unsigned j = 0; j < sol.current_state[i].size(); j++) {
+            cout << sol.current_state[j][i] << " ";
         }
         cout << endl;
     }
@@ -111,7 +111,7 @@ int main() {
         cin >> choice;
     }
     ASTAR *a;
-    Node* sol = a->solve(p, choice);
+    Node sol = a->solve(p, choice);
     printSol(sol);
 
 
