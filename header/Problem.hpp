@@ -24,18 +24,19 @@ vector<vector<int> > goal_state;
 //int goal_state[3][3];
 //int **goal_state = new int*[3];
 
-bool isGoal( Node &curr);
+bool isGoal( Node* curr);
+//bool isPrev(Node* curr, vector<Node*> vis);
 //void expand(Node* curr);
-void moveUp( Node &curr);
-void moveDown( Node &curr);
+void moveUp( Node* curr);
+void moveDown( Node* curr);
 
-void moveLeft( Node &curr);
-void moveRight( Node &curr);
+void moveLeft( Node* curr);
+void moveRight( Node* curr);
 
-void misplacedTile( Node &curr);
-void euclidianDist( Node &curr);
+void misplacedTile( Node* curr);
+void euclidianDist( Node* curr);
 
-void findBlank( Node &curr, int &ipos, int &jpos);   //helper function to find space on board
+void findBlank( Node *curr, int &ipos, int &jpos);   //helper function to find space on board
 
 private:
 

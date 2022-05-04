@@ -12,8 +12,9 @@ using namespace std;
 
 class ASTAR {
 public:
-
-const Node& solve(Problem* p, int choice);
+vector<Node*> visited;
+Node* solve(Problem* p, int choice);
+bool isPrev(Node* curr, const vector<Node*> &visit);
 
 private:
 
