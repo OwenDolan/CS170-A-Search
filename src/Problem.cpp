@@ -106,18 +106,13 @@ void Problem::moveRight( Node *curr) {
 
 
 void Problem::misplacedTile( Node *curr) {
-    int counter = 1;
     int misplaced = 0;
     for (unsigned i = 0; i < curr->current_state.size(); i++) {
         for (unsigned j = 0; j < curr->current_state[i].size(); j++) {
-            if (curr->current_state[i][j] != counter) {
+            if (curr->current_state[i][j] != goal_state[i][j]) {
                 if (curr->current_state[i][j] != 0) {
                 misplaced++;
-                counter++;
                 }
-            }
-            else {
-                counter++;
             }
         }
     }
@@ -128,29 +123,29 @@ void Problem::euclidianDist( Node *curr) {   //want # of spaces each tile is awa
     int dist = 0;
     for (unsigned i = 0; i < curr->current_state.size(); i++) {
         for (unsigned j = 0; j < curr->current_state[i].size(); j++) {
-            if(curr->current_state[j][i] == 1) {
-                dist += calcDist(j,i,0,0);
+            if(curr->current_state[i][j] == 1) {
+                dist += calcDist(i,j,0,0);
             }
-            else if (curr->current_state[j][i] == 2) {
-                dist += calcDist(j,i,0,1);
+            else if (curr->current_state[i][j] == 2) {
+                dist += calcDist(i,j,0,1);
             }
-            else if (curr->current_state[j][i] == 3) {
-                dist += calcDist(j,i,0,2);
+            else if (curr->current_state[i][j] == 3) {
+                dist += calcDist(i,j,0,2);
             }
-            else if (curr->current_state[j][i] == 4) {
-                dist += calcDist(j,i,1,0);
+            else if (curr->current_state[i][j] == 4) {
+                dist += calcDist(i,j,1,0);
             }
-            else if (curr->current_state[j][i] == 5) {
-                dist += calcDist(j,i,1,1);
+            else if (curr->current_state[i][j] == 5) {
+                dist += calcDist(i,j,1,1);
             }
-            else if (curr->current_state[j][i] == 6) {
-                dist += calcDist(j,i,1,2);
+            else if (curr->current_state[i][j] == 6) {
+                dist += calcDist(i,j,1,2);
             }
-            else if (curr->current_state[j][i] == 7) {
-                dist += calcDist(j,i,2,0);
+            else if (curr->current_state[i][j] == 7) {
+                dist += calcDist(i,j,2,0);
             }
-            else if (curr->current_state[j][i] == 8) {
-                dist += calcDist(j,i,2,1);
+            else if (curr->current_state[i][j] == 8) {
+                dist += calcDist(i,j,2,1);
             }
         }
     }

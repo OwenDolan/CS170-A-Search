@@ -1,5 +1,5 @@
 #include "../header/ASTAR.hpp"
-
+#include <chrono>
 //vector<Node*> visited;
 
 bool ASTAR::isPrev(Node* curr, const vector<Node*> &visit) {
@@ -12,13 +12,13 @@ bool ASTAR::isPrev(Node* curr, const vector<Node*> &visit) {
                 }
             }
         }
-    }
-    if (counter >= 9) {
+    if (counter == 9) {
         return true;
     }
-    else {
-        return false;
+    counter=0;
     }
+
+        return false;
 }
 
 struct HeuristicComparator
@@ -30,6 +30,7 @@ struct HeuristicComparator
 };
 
 Node* ASTAR::solve(Problem* p, int choice) {
+    auto begin = high_resolution_clock::now();
     priority_queue<Node*, vector<Node*>, HeuristicComparator> nodes;
     vector<Node*> visited;
     Node* start = new Node;
@@ -41,6 +42,7 @@ Node* ASTAR::solve(Problem* p, int choice) {
     bool finished = false;
     bool failed;
     Node* curr = new Node;
+    int loopCounter = 0;
     while (!finished) {
         if (nodes.empty()) {
             failed = true;
@@ -54,29 +56,40 @@ Node* ASTAR::solve(Problem* p, int choice) {
         }
         if (!p->isGoal(curr)) {           //NEED TO CHANGE/GETRID OF BC IT RUINS UNIFORM SEARCH!!!!
             if (choice == 1) {  //choose which algorithm to use
+
+                visited.push_back(curr);
+
                 Node* newUp = new Node(curr);
                 p->moveUp(newUp);
                 newUp->findBlank();
-                newUp->heuristicVal++;
-                nodes.push(newUp);
+                //newUp->heuristicVal++;
+                if (!isPrev(newUp,visited)) {
+                    nodes.push(newUp);    //push to frontier
+                }
 
                 Node* newDown = new Node(curr);
                 p->moveDown(newDown);
                 newDown->findBlank();
-                newDown->heuristicVal++;
-                nodes.push(newDown);
+                //newDown->heuristicVal++;
+                if (!isPrev(newDown, visited)) {
+                    nodes.push(newDown);    //push to frontier
+                }
 
                 Node* newLeft = new Node(curr);
                 p->moveLeft(newLeft);
                 newLeft->findBlank();                
-                newLeft->heuristicVal++;
-                nodes.push(newLeft);
+                //newLeft->heuristicVal++;
+                if (!isPrev(newLeft, visited)) {
+                    nodes.push(newLeft);    //push to frontier
+                }
 
                 Node* newRight = new Node(curr);
                 p->moveRight(newRight);
                 newRight->findBlank();
-                newRight->heuristicVal++;
-                nodes.push(newRight);
+                //newRight->heuristicVal++;
+                if (!isPrev(newRight,visited)) {
+                    nodes.push(newRight);    //push to frontier
+                }
 
             }
             else if (choice == 2) {
@@ -84,10 +97,13 @@ Node* ASTAR::solve(Problem* p, int choice) {
                 visited.push_back(curr);
                 Node* newUp = new Node(curr);
                 p->moveUp(newUp); //perform operation
-                newUp->findBlank();
+                newUp->findBlank(); //find where 0 lies update ipos and jpos
                 p->misplacedTile(newUp);  //set misplacedTile heuristic
-                //newUp->heuristicVal++;
-                
+/*
+                for (int i = 0; i < loopCounter; i++) { //add 1 for every level deep
+                    newUp->heuristicVal++;
+                }
+                */
                 if (!isPrev(newUp,visited)) {
                     nodes.push(newUp);    //push to frontier
                 }
@@ -96,7 +112,11 @@ Node* ASTAR::solve(Problem* p, int choice) {
                 p->moveDown(newDown);
                 newDown->findBlank();
                 p->misplacedTile(newDown);
-                //newDown->heuristicVal++;
+            /*
+                for (int i = 0; i < loopCounter; i++) {
+                    newDown->heuristicVal++;
+                }
+                */
                 if (!isPrev(newDown, visited)) {
                     nodes.push(newDown);    //push to frontier
                 }
@@ -105,8 +125,11 @@ Node* ASTAR::solve(Problem* p, int choice) {
                 p->moveLeft(newLeft);
                 newLeft->findBlank();
                 p->misplacedTile(newLeft);
-                //newLeft->heuristicVal++;
-                
+                /*
+                for (int i =0; i < loopCounter; i++) {
+                    newLeft->heuristicVal++;
+                }
+                    */
                 if (!isPrev(newLeft, visited)) {
                     nodes.push(newLeft);    //push to frontier
                 }
@@ -115,45 +138,63 @@ Node* ASTAR::solve(Problem* p, int choice) {
                 p->moveRight(newRight);
                 newRight->findBlank();
                 p->misplacedTile(newRight);
-                //newRight->heuristicVal++;
-                
+                /*
+                for (int i =0; i< loopCounter; i++) {
+                    newRight->heuristicVal++;
+                }
+                */
                 if (!isPrev(newRight,visited)) {
                     nodes.push(newRight);    //push to frontier
                 }
+
+                loopCounter++;
                 
             }
             else if (choice == 3) {
+
+                visited.push_back(curr);
                 Node* newUp = new Node(curr);
                 p->moveUp(newUp); //perform operation
                 newUp->findBlank();
                 p->euclidianDist(newUp);  //set misplacedTile heuristic
                 //newUp->heuristicVal++;
-                nodes.push(newUp);    //push to frontier
+                if (!isPrev(newUp,visited)) {
+                    nodes.push(newUp);    //push to frontier
+                }
 
                 Node* newDown = new Node(curr);
                 p->moveDown(newDown);
                 newDown->findBlank();
                 p->euclidianDist(newDown);
                 //newDown->heuristicVal++;
-                nodes.push(newDown);
+                if (!isPrev(newDown, visited)) {
+                    nodes.push(newDown);    //push to frontier
+                }
 
                 Node* newLeft = new Node(curr);
                 p->moveLeft(newLeft);                
                 newLeft->findBlank();
                 p->euclidianDist(newLeft);
                 //newLeft->heuristicVal++;
-                nodes.push(newLeft);
+                if (!isPrev(newLeft, visited)) {
+                    nodes.push(newLeft);    //push to frontier
+                }
                 
                 Node* newRight = new Node(curr);
                 p->moveRight(newRight);
                 newRight->findBlank();
                 p->euclidianDist(newRight);
                 //newRight->heuristicVal++;
-                nodes.push(newRight);
+                if (!isPrev(newRight,visited)) {
+                    nodes.push(newRight);    //push to frontier
+                }
             }
         }
         else {
             finished = true; 
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<microseconds>(stop - begin);
+            cout << "Completed in " << duration.count() << " microseconds." << endl;
         }
     }
     return curr;
